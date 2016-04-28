@@ -79,12 +79,43 @@
     //
     // test if a specific row on this board contains a conflict
     hasRowConflictAt: function(rowIndex) {
-      return false; // fixme
+      var currentRow = this.get(rowIndex);
+      var counter = 0;
+
+      for (var square = 0; square < currentRow.length; square++) {
+        if (currentRow[square]) {
+          counter++;
+        }
+      }
+
+      return counter > 1;
     },
 
     // test if any rows on this board contain conflicts
     hasAnyRowConflicts: function() {
-      return false; // fixme
+      var rowsArr = this.rows();
+      var conflictFound = false;
+      // loop through the rows
+      for (var row = 0; row < rowsArr.length; row++) {
+        // have counter variable to see how many pieces are on that row
+        var rowPieces = 0;
+        // loop through each square
+        for (var square = 0; square < rowsArr[row].length; square++) {
+          // check each square to see if there's a piece
+          if (rowsArr[row][square]) {
+            // increment rowPieces
+            rowPieces++;
+          }
+        }
+        // also check if there are more than one, if there is, then there is a collision
+        if (rowPieces > 1) {
+          // stop looping & return
+          conflictFound = true;
+          // return conflictFound;
+        }
+      }
+      // will return false
+      return conflictFound;
     },
 
 
@@ -99,7 +130,22 @@
 
     // test if any columns on this board contain conflicts
     hasAnyColConflicts: function() {
-      return false; // fixme
+      var board = this.attributes;
+      var counter = 0;
+
+      for (var column = 0; column < board[0].length; column++) { //keeps track of how many columns to iterate through
+        for (var row in board[column]) { //iterate through keys in board object at index[column] 
+          if (board[row][column] === 1) {
+            counter++;
+          }
+          if (counter > 1) {
+            return true;
+          }
+        }
+        counter = 0;
+      }
+
+      return false;
     },
 
 
@@ -109,13 +155,66 @@
     //
     // test if a specific major diagonal on this board contains a conflict
     hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
-      return false; // fixme
+      var board = this.attributes;
+      // var firstRow = this.attributes[0];
+      // var targetSquare = firstRow[majorDiagonalColumnIndexAtFirstRow];
+      var pieceCounter = 0;
+      //check target square for a queen
+      //move to target square location + 1 column - 1 row
+      //stop when you've reached the last row
+      for (var column = majorDiagonalColumnIndexAtFirstRow, row = 0; row < board[0].length; column++, row++) {
+        if (board[column][row] === 1) {
+          pieceCounter++;
+        }
+      }
+      if (pieceCounter > 1) {
+        return true;
+      } else {
+        return false;
+      }
+
     },
+
 
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
-      return false; // fixme
+      // var board = this.attributes;
+
+      // returns the board -- array of arrays
+      var row = this.rows();
+      var startLookingHere = -(board[0].length - 1);
+      console.log(startLookingHere)
+      var endBeforeHere = board[0].length;
+      var hasConflict = false;
+      var row = 0;
+      // var counter = 0;
+
+      if (startLookingHere < 0) {
+        while (startLookingHere < 0) {
+          startLookingHere++;
+          row++;
+        }
+      }
+
+      for (startLookingHere, row; startLookingHere < endBeforeHere; startLookingHere++, row++) {
+        if (board[startLookingHere][row] === 1) {
+          return this.hasMajorDiagonalConflictAt(startLookingHere);
+        }
+      }
+      return hasConflict;
     },
+
+// ALL RECURSE    
+// 1. need a loop to start at 0, 0 
+// 2. does same as 1 -- but starting at the next iteration of the row
+// 3. does same as 1 -- but starting at the next iteration for column
+
+
+// loop through starting at 0,0
+// if queen is found
+// loop through starting from her index--
+
+
 
 
 
@@ -129,7 +228,50 @@
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
-      return false; // fixme
+      // var hasConflict = false, firstQueen = false, secondQueen = false;
+      // var board = this.attributes;
+
+      // // starting row pos
+      // var startTop = 0;
+      // // starting left pos
+      // var startLeft = board[0].length-1;
+
+      // var search = function(top, left) {
+      //   var newTop = board[top];
+      //   var newLeft = board[top][left];
+
+      //   if (top > board[0].length || left < 0) {
+      //     return;
+      //   } else {
+      //     if (board[left][top] === 1) {
+
+      //       if(firstQueen === true){
+      //         secondQueen = true;
+      //         return;
+
+      //       } else {
+
+      //         firstQueen = true;
+      //       }
+
+      //       search(top++, left--);
+      //     }
+      //   }
+      // };
+
+      // // when first called, will start looking from the very top left
+      // for(var column = 0, row1 = board[0]; column < row1.length; column++) { //loop through column (top)
+      //   for(var currentRow = 0; currentRow < row1.length; currentRow++) { //loop through row(left)
+      //     search(column, currentRow);
+      //   }
+      // }
+
+      // if(firstQueen && secondQueen){
+      //   hasConflict = true;
+      // }
+
+      // return hasConflict;
+      return false;
     }
 
     /*--------------------  End of Helper Functions  ---------------------*/
