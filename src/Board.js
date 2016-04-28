@@ -156,14 +156,14 @@
     // test if a specific major diagonal on this board contains a conflict
     hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
       var board = this.attributes;
-      // var firstRow = this.attributes[0];
-      // var targetSquare = firstRow[majorDiagonalColumnIndexAtFirstRow];
+
       var pieceCounter = 0;
-      //check target square for a queen
-      //move to target square location + 1 column - 1 row
-      //stop when you've reached the last row
+
       for (var column = majorDiagonalColumnIndexAtFirstRow, row = 0; row < board[0].length; column++, row++) {
-        if (board[column][row] === 1) {
+        if (board[column] === undefined){
+          continue;
+        }
+        if (board[row][column] === 1) {
           pieceCounter++;
         }
       }
@@ -178,28 +178,21 @@
 
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
-      // var board = this.attributes;
 
       // returns the board -- array of arrays
-      var row = this.rows();
+      var board = this.rows();
       var startLookingHere = -(board[0].length - 1);
-      console.log(startLookingHere)
       var endBeforeHere = board[0].length;
       var hasConflict = false;
       var row = 0;
-      // var counter = 0;
-
-      if (startLookingHere < 0) {
-        while (startLookingHere < 0) {
-          startLookingHere++;
-          row++;
-        }
-      }
-
+ 
       for (startLookingHere, row; startLookingHere < endBeforeHere; startLookingHere++, row++) {
-        if (board[startLookingHere][row] === 1) {
-          return this.hasMajorDiagonalConflictAt(startLookingHere);
+
+        if (this.hasMajorDiagonalConflictAt(startLookingHere)) {
+          hasConflict = true;
+          return hasConflict;
         }
+        
       }
       return hasConflict;
     },
@@ -223,56 +216,42 @@
     //
     // test if a specific minor diagonal on this board contains a conflict
     hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow) {
-      return false; // fixme
+      var board = this.attributes;
+      var pieceCounter = 0;
+
+      for (var column = minorDiagonalColumnIndexAtFirstRow, row = 0; row < board[0].length; column--, row++) {
+        if (board[column] === undefined){
+          continue;
+        }
+        if (board[column][row] === 1) {
+          pieceCounter++;
+        }
+      }
+      if (pieceCounter > 1) {
+        return true;
+      } else {
+        return false;
+      }
+
     },
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
-      // var hasConflict = false, firstQueen = false, secondQueen = false;
-      // var board = this.attributes;
+      var board = this.rows();
+      var startLookingHere = board[0].length + board[0].length - 2;
+      var endBeforeHere = 0;
+      var hasConflict = false;
+      var row = 0;
 
-      // // starting row pos
-      // var startTop = 0;
-      // // starting left pos
-      // var startLeft = board[0].length-1;
+      for (startLookingHere; startLookingHere > endBeforeHere; startLookingHere--) {
+        if (this.hasMinorDiagonalConflictAt(startLookingHere)) {
+          hasConflict = true;
+          return hasConflict;
+        }
+      }
+      return hasConflict;
 
-      // var search = function(top, left) {
-      //   var newTop = board[top];
-      //   var newLeft = board[top][left];
-
-      //   if (top > board[0].length || left < 0) {
-      //     return;
-      //   } else {
-      //     if (board[left][top] === 1) {
-
-      //       if(firstQueen === true){
-      //         secondQueen = true;
-      //         return;
-
-      //       } else {
-
-      //         firstQueen = true;
-      //       }
-
-      //       search(top++, left--);
-      //     }
-      //   }
-      // };
-
-      // // when first called, will start looking from the very top left
-      // for(var column = 0, row1 = board[0]; column < row1.length; column++) { //loop through column (top)
-      //   for(var currentRow = 0; currentRow < row1.length; currentRow++) { //loop through row(left)
-      //     search(column, currentRow);
-      //   }
-      // }
-
-      // if(firstQueen && secondQueen){
-      //   hasConflict = true;
-      // }
-
-      // return hasConflict;
-      return false;
-    }
+    },
 
     /*--------------------  End of Helper Functions  ---------------------*/
 
